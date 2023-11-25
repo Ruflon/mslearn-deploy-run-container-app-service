@@ -1,0 +1,65 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- none
+
+resources:
+- repo: self
+
+variables:
+  # Container registry service connection established during pipeline creation
+  dockerRegistryServiceConnection: '55814138-12c3-4a65-915f-76fbf2320e92'
+  containerRegistry: 'rafalregistry.azurecr.io'
+  imageRepository: 'webimage'
+  dockerfilePath: '$(Build.SourcesDirectory)/dotnet/Dockerfile'
+  tag: '$(Build.BuildId)'
+
+  # Agent VM image name
+  vmImageName: 'ubuntu-latest'
+
+stages:
+- stage: BuildAndPushImage
+  displayName: 'Build and Push Docker Image'
+  jobs:
+  - job: BuildAndPush
+    displayName: 'Build and Push Docker Image'
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+    # - task: Docker@2
+    #   displayName: Login to ACR
+    #   inputs:
+    #     command: login
+    #     containerRegistry: $(containerRegistry)
+    - task: Docker@2
+      displayName: Build and Push
+      inputs:
+        command: buildAndPush
+        dockerfile: $(dockerfilePath)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        repository: $(imageRepository)
+        tags: |
+          latest
+
+# - stage: DeployToWebApp
+
+
+    # - script: |
+    #     docker build -t $(imageRepository):latest .
+    #     docker login $(containerRegistry) -u rafalregistry -p $(ACR_PAT)
+    #     docker push $(containerRegistry)/$(imageRepository):latest
+    #   displayName: 'Build and push Docker image'
+    #   env:
+    #     ACR_PAT: $(ACR_PAT)
+    # - task: Docker@2
+    #   displayName: Build and push an image to container registry
+    #     inputs:
+    #       command: buildAndPush
+    #     repository: $(imageRepository)
+    #     dockerfile: $(dockerfilePath)
+    #     containerRegistry: $(dockerRegistryServiceConnection)
+    #     tags: |
+    #       $(tag)
