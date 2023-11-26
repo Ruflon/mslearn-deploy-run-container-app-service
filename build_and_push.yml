@@ -19,7 +19,7 @@ variables:
   imageRepository: 'webimage'
   dockerfilePath: '$(Build.SourcesDirectory)/dotnet/Dockerfile'
   # tag: '$(Build.BuildId)'
-  tag: 'latest'
+  tag: 'latestt'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
@@ -45,8 +45,7 @@ stages:
         dockerfile: $(dockerfilePath)
         containerRegistry: $(dockerRegistryServiceConnection)
         repository: $(imageRepository)
-        tags: |
-          latest
+        tags: $(tag)
 
 - stage: DeployToWebApp
   displayName: 'Deploy to Azure Web App'
