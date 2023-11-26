@@ -12,10 +12,13 @@ resources:
 variables:
   # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: '55814138-12c3-4a65-915f-76fbf2320e92'
+  azureSubscription: 'cargo-20volume-20220610'
+  appName: 'rafalwebappcicd'
   containerRegistry: 'rafalregistry.azurecr.io'
   imageRepository: 'webimage'
   dockerfilePath: '$(Build.SourcesDirectory)/dotnet/Dockerfile'
-  tag: '$(Build.BuildId)'
+  # tag: '$(Build.BuildId)'
+  tag: 'latest'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
@@ -42,7 +45,7 @@ stages:
         containerRegistry: $(dockerRegistryServiceConnection)
         repository: $(imageRepository)
         tags: |
-          latest
+          ($tag)
 
 - stage: DeployToWebApp
   displayName: 'Deploy to Azure Web App'
@@ -54,10 +57,17 @@ stages:
     pool:
       vmImage: $(vmImageName)
     steps:
-    - script: |
-        az webapp config container set --name rafalwebapppipeline --resource-group rg-prod-rafal-portfolio --docker-custom-image-name rafalregistry.azurecr.io/webapp:latest --docker-registry-server-url https://rafalregistry.azurecr.io --docker-registry-server-user rafalregistry 
-        az webapp restart --name rafalwebapppipeline --resource-group rg-prod-rafal-portfolio
-      displayName: 'Deploy Docker image to Web App'
+    - task: AzureWebAppContainer@1
+      displayName: 'Azure Web App on Container Deploy'
+      inputs:
+        azureSubscription: $(azureSubscription)
+        appName: $(appName)
+        containers: $(containerRegistry)/$(imageRepository):$(tag)
+      
+    # - script: |
+    #     az webapp config container set --name rafalwebapppipeline --resource-group rg-prod-rafal-portfolio --docker-custom-image-name rafalregistry.azurecr.io/webimage:latest --docker-registry-server-url https://rafalregistry.azurecr.io --docker-registry-server-user rafalregistry 
+    #     az webapp restart --name rafalwebapppipeline --resource-group rg-prod-rafal-portfolio
+    #   displayName: 'Deploy Docker image to Web App'
 
 
 # --docker-registry-server-password $(ACR_PAT)
