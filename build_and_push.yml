@@ -35,7 +35,7 @@ stages:
     #     command: login
     #     containerRegistry: $(containerRegistry)
     - task: Docker@2
-      displayName: Build and Push
+      displayName: 'Build and Push'
       inputs:
         command: buildAndPush
         dockerfile: $(dockerfilePath)
@@ -44,22 +44,29 @@ stages:
         tags: |
           latest
 
-# - stage: DeployToWebApp
+- stage: DeployToWebApp
+  displayName: 'Deploy to Azure Web App'
+  dependsOn: BuildAndPushImage
+  condition: succeeded('BuildAndPushImage')
+  jobs:
+  - deployment: AppDeployment
+    displayName: 'Deploy to Web App'
+    pool:
+      vmImage: $(vmImageName)
+    steps:
+  - script: |
+      az webapp config container set --name rafalwebapppipeline --resource-group rg-prod-rafal-portfolio --docker-custom-image-name rafalregistry.azurecr.io/webapp:latest --docker-registry-server-url https://rafalregistry.azurecr.io --docker-registry-server-user rafalregistry 
+      az webapp restart --name rafalwebapppipeline --resource-group rg-prod-rafal-portfolio
+    displayName: 'Deploy Docker image to Web App'
 
 
-    # - script: |
-    #     docker build -t $(imageRepository):latest .
-    #     docker login $(containerRegistry) -u rafalregistry -p $(ACR_PAT)
-    #     docker push $(containerRegistry)/$(imageRepository):latest
-    #   displayName: 'Build and push Docker image'
-    #   env:
-    #     ACR_PAT: $(ACR_PAT)
-    # - task: Docker@2
-    #   displayName: Build and push an image to container registry
-    #     inputs:
-    #       command: buildAndPush
-    #     repository: $(imageRepository)
-    #     dockerfile: $(dockerfilePath)
-    #     containerRegistry: $(dockerRegistryServiceConnection)
-    #     tags: |
-    #       $(tag)
+# --docker-registry-server-password $(ACR_PAT)
+
+    # env:
+      # ACR_PAT: $(ACR_PAT)
+
+    # strategy:
+    #   RunOnce:
+    #     deploy:
+    #       steps:
+    #       - task: CopyPublishBuildArtifact@1
