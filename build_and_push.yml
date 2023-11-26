@@ -49,7 +49,7 @@ stages:
   dependsOn: BuildAndPushImage
   condition: succeeded('BuildAndPushImage')
   jobs:
-  - deployment: AppDeployment
+  - job: AppDeployment
     displayName: 'Deploy to Web App'
     pool:
       vmImage: $(vmImageName)
