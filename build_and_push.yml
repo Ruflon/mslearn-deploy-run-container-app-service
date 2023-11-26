@@ -54,10 +54,10 @@ stages:
     pool:
       vmImage: $(vmImageName)
     steps:
-  - script: |
-      az webapp config container set --name rafalwebapppipeline --resource-group rg-prod-rafal-portfolio --docker-custom-image-name rafalregistry.azurecr.io/webapp:latest --docker-registry-server-url https://rafalregistry.azurecr.io --docker-registry-server-user rafalregistry 
-      az webapp restart --name rafalwebapppipeline --resource-group rg-prod-rafal-portfolio
-    displayName: 'Deploy Docker image to Web App'
+    - script: |
+        az webapp config container set --name rafalwebapppipeline --resource-group rg-prod-rafal-portfolio --docker-custom-image-name rafalregistry.azurecr.io/webapp:latest --docker-registry-server-url https://rafalregistry.azurecr.io --docker-registry-server-user rafalregistry 
+        az webapp restart --name rafalwebapppipeline --resource-group rg-prod-rafal-portfolio
+      displayName: 'Deploy Docker image to Web App'
 
 
 # --docker-registry-server-password $(ACR_PAT)
