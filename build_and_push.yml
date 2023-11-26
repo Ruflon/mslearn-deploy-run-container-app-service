@@ -12,7 +12,7 @@ resources:
 variables:
   # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: '55814138-12c3-4a65-915f-76fbf2320e92'
-  azureSubscription: 'cargo-20volume-20220610'
+  azureSubscription: 'AzureWebAppContainer'
   appName: 'rafalwebappcicd'
   containerRegistry: 'rafalregistry.azurecr.io'
   imageRepository: 'webimage'
@@ -64,6 +64,7 @@ stages:
         appName: $(appName)
         containers: $(containerRegistry)/$(imageRepository):$(tag)
       
+    # 
     # - script: |
     #     az webapp config container set --name rafalwebapppipeline --resource-group rg-prod-rafal-portfolio --docker-custom-image-name rafalregistry.azurecr.io/webimage:latest --docker-registry-server-url https://rafalregistry.azurecr.io --docker-registry-server-user rafalregistry 
     #     az webapp restart --name rafalwebapppipeline --resource-group rg-prod-rafal-portfolio
