@@ -13,7 +13,7 @@ variables:
   # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: '55814138-12c3-4a65-915f-76fbf2320e92'
   azureSubscription: 'cargo-20volume-20220610'
-  appName: 'rafalwebappcicd'
+  appName: 'mywebappcicd'
   containerRegistry: 'rafalregistry.azurecr.io'
   imageRepository: 'webimage'
   dockerfilePath: '$(Build.SourcesDirectory)/dotnet/Dockerfile'
@@ -57,17 +57,17 @@ stages:
     pool:
       vmImage: $(vmImageName)
     steps:
-    # - task: AzureWebAppContainer@1
-    #   displayName: 'Azure Web App on Container Deploy'
-    #   inputs:
-    #     azureSubscription: $(azureSubscription)
-    #     appName: $(appName)
-    #     containers: $(containerRegistry)/$(imageRepository):$(tag)
-    - task: AzureRmWebAppDeployment@4
-      ConnectionType: 'AzureRM'
-      azureSubscription: $(azureSubscription)
-      appType: 'webAppContainer'
-      WebAppName: ($appName)
+    - task: AzureWebAppContainer@1
+      displayName: 'Azure Web App on Container Deploy'
+      inputs:
+        azureSubscription: $(azureSubscription)
+        appName: $(appName)
+        containers: $(containerRegistry)/$(imageRepository):$(tag)
+    # - task: AzureRmWebAppDeployment@4
+    #   ConnectionType: 'AzureRM'
+    #   azureSubscription: $(azureSubscription)
+    #   appType: 'webAppContainer'
+    #   WebAppName: ($appName)
 
 
 
