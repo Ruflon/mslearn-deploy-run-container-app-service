@@ -13,7 +13,8 @@ variables:
   # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: '55814138-12c3-4a65-915f-76fbf2320e92'
   azureSubscription: 'cargo-20volume-20220610'
-  appName: 'mywebappcicd'
+  # appName: 'mywebappcicd'
+  appName: 'rafalwebapp'
   containerRegistry: 'rafalregistry.azurecr.io'
   imageRepository: 'webimage'
   dockerfilePath: '$(Build.SourcesDirectory)/dotnet/Dockerfile'
