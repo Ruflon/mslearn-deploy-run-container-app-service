@@ -44,8 +44,7 @@ stages:
         dockerfile: $(dockerfilePath)
         containerRegistry: $(dockerRegistryServiceConnection)
         repository: $(imageRepository)
-        tags: |
-          ($tag)
+        tags: ($tag)
 
 - stage: DeployToWebApp
   displayName: 'Deploy to Azure Web App'
