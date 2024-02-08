@@ -17,7 +17,7 @@ variables:
   containerRegistry: 'rafalregistry.azurecr.io'
   imageRepository: 'webimage'
   dockerfilePath: '$(Build.SourcesDirectory)/dotnet/Dockerfile'
-  tag: 'latestt'
+  tag: 'latest'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
