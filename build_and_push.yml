@@ -11,7 +11,7 @@ resources:
 
 variables:
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: '099cc2a5-c211-480d-a820-eae57d67b655'
+  dockerRegistryServiceConnection: '099cc2a5-c211-480d-a820-eae57d67b655' #from build in ADO pipeline creator/ u can get it from URL in ADO service connetsions in settings
   azureSubscription: 'cargo-20volume-20220610'
   appName: 'rafalwebapp'
   containerRegistry: 'rafalregistry.azurecr.io'
